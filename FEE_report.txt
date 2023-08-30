@@ -1,0 +1,36 @@
+import java.sql.*;
+
+public class FeeReportApp {
+    public static void main(String[] args) {
+        String jdbcUrl = "jdbc:mysql://localhost:3306/fee_report";
+        String user = "root";
+        String password = "";
+
+        try {
+            Connection connection = DriverManager.getConnection(jdbcUrl, user, password);
+            System.out.println("Connected to the database");
+
+
+            // To insert the data
+            Statement statement = connection.createStatement();
+            String insertQuery = "INSERT INTO students (ID,name, amount, payment_date) VALUES ('035','vinod', 10000, '2023-08-28')";
+            int rowsAffected = statement.executeUpdate(insertQuery);
+            if (rowsAffected > 0) {
+                System.out.println(".");
+            }//To retrieve the students Fee report data
+            String selectQuery = "SELECT * FROM students";
+            ResultSet resultSet = statement.executeQuery(selectQuery);
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                double amount = resultSet.getDouble("amount");
+                Date paymentDate = resultSet.getDate("payment_date");
+                System.out.println("ID: " + id + ", Name: " + name + ", Amount: " + amount + ", Payment Date: " + paymentDate);
+            }
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
